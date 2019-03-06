@@ -6,7 +6,7 @@ import (
 	"github.com/adlio/trello"
 )
 
-// if trello.Card != modules.Card => return true
+// if trello.Card != modules.Card => return false
 func CompareTwoCard(cardsBoard *trello.Card, cardsDB modules.Card) bool {
 	if cardsBoard.ID != cardsDB.ID {
 		return false
