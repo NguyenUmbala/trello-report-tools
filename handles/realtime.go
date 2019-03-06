@@ -3,9 +3,10 @@ package handles
 import (
 	"TrelloReportTools/modules"
 	"TrelloReportTools/trelloAPI"
-
-	"github.com/adlio/trello"
+	"TrelloReportTools/utils"
 )
+
+var Card utils.Card
 
 func UpdateCardsInRealTime() {
 	for {
@@ -13,13 +14,11 @@ func UpdateCardsInRealTime() {
 		cardsOnBoard := trelloAPI.GetCardsOnBoard(idBoard)
 		cardsOnDB := modules.GetCards()
 
-		var cardsChangedDueDate []*trello.Card
-		var tmpCard modules.Card
+		// Compare due date of two cards
 		for i, _ := range cardsOnBoard {
 			for j, _ := range cardsOnDB {
-				if CompareTwoCard(cardsOnBoard[i], cardsOnDB[j]) {
-					cardsChangedDueDate = append(cardsChangedDueDate, cardsOnBoard[i])
-					modules.UpdateCard(tmpCard.NewCard(cardsOnBoard[i]))
+				if Card.CompareTwoCard(cardsOnBoard[i], cardsOnDB[j]) {
+					modules.UpdateCard(Card.NewCard(cardsOnBoard[i]))
 				}
 			}
 		}

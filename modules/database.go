@@ -1,8 +1,6 @@
 package modules
 
 import (
-	"fmt"
-
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
@@ -26,17 +24,6 @@ func GetCards() []Card {
 	return cards
 }
 
-func SaveCard(card Card) {
-	if err := db.Create(&card).Error; err != nil {
-		// Handle error
-		fmt.Println(err)
-	}
-}
-
 func UpdateCard(card Card) {
-	if db.NewRecord(card) == true { // Create new card
-		db.Create(&card)
-	} else { // Update old card
-		db.Save(&card)
-	}
+	db.Save(&card)
 }

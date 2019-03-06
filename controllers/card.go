@@ -3,19 +3,21 @@ package controllers
 import (
 	"TrelloReportTools/modules"
 	"TrelloReportTools/trelloAPI"
+	"TrelloReportTools/utils"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
+var Card utils.Card
+
 func init() {
 	// Save cards
-	var tmpCard modules.Card
 	idBoard := "iCBtQXmr"
 	cardsOnBoard := trelloAPI.GetCardsOnBoard(idBoard)
 
 	for _, v := range cardsOnBoard {
-		modules.SaveCard(tmpCard.NewCard(v))
+		modules.UpdateCard(Card.NewCard(v))
 	}
 }
 
