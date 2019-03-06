@@ -2,6 +2,7 @@ package database
 
 import (
 	"TrelloReportTools/modules"
+	"fmt"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -27,7 +28,10 @@ func GetCards() []modules.Card {
 }
 
 func SaveCard(card modules.Card) {
-	db.Create(&card)
+	if err := db.Create(&card).Error; err != nil {
+		// Handle error
+		fmt.Println(err)
+	}
 }
 
 func UpdateCard(card modules.Card) {

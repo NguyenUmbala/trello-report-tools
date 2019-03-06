@@ -1,7 +1,8 @@
 package main
 
 import (
-	"./routers"
+	"TrelloReportTools/handles"
+	"TrelloReportTools/routers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,6 +12,6 @@ func main() {
 	r := routers.Routers
 
 	routers.SetupRouters()
-	//go routers.Routine()
+	go handles.UpdateCardsInRealTime()
 	r.Run(":3000")
 }

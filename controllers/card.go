@@ -4,9 +4,9 @@ import (
 	"TrelloReportTools/database"
 	"TrelloReportTools/modules"
 	"TrelloReportTools/trelloAPI"
+	"fmt"
 	"time"
 
-	"github.com/adlio/trello"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,7 +16,7 @@ func init() {
 	idBoard := "iCBtQXmr"
 	cardsOnBoard, err := trelloAPI.GetCardsOnBoard(idBoard)
 	if err != nil {
-		// Handle error
+		fmt.Println(err)
 	}
 
 	for _, v := range cardsOnBoard {
@@ -29,11 +29,11 @@ func GetAllCardReview(c *gin.Context) {
 
 	cardsOnListReviewMe, err := trelloAPI.GetCardsIsOpenOnWeek(idBoard, "review-me")
 	if err != nil {
-		// Handle error
+		fmt.Println(err)
 	}
 	cardsOnListDone, err := trelloAPI.GetCardsIsOpenOnWeek(idBoard, "Done")
 	if err != nil {
-		// Handle error
+		fmt.Println(err)
 	}
 
 	c.JSON(200, gin.H{
@@ -44,11 +44,12 @@ func GetAllCardReview(c *gin.Context) {
 }
 
 func GetAllCardChangeDue(c *gin.Context) {
+	lastDay := time.Now().AddDate(0, 0, -1)
 	cardsOnDB := database.GetCards()
 	var cardsChangedDueDate []modules.Card
-	lastDay := time.Now().AddDate(0, 0, -1)
+
 	for _, v := range cardsOnDB {
-		date := *v.DateLastActivity
+		date := *v.DateLastChangeDue
 		if date.After(lastDay) {
 			cardsChangedDueDate = append(cardsChangedDueDate, v)
 		}
@@ -57,46 +58,4 @@ func GetAllCardChangeDue(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"Cards changed due date": cardsChangedDueDate,
 	})
-}
-
-func UpdateCardsInRealTime() {
-	for {
-		idBoard := "iCBtQXmr"
-		cardsOnBoard, err := trelloAPI.GetCardsOnBoard(idBoard)
-		if err != nil {
-			// Handle error
-		}
-
-		cardsOnDB := database.GetCards()
-		var cardsChangedDueDate []*trello.Card
-		var tmpCard modules.Card
-		for i, _ := range cardsOnBoard {
-			for j, _ := range cardsOnDB {
-				if CompareTwoCard(cardsOnBoard[i], cardsOnDB[j]) {
-					cardsChangedDueDate = append(cardsChangedDueDate, cardsOnBoard[i])
-					database.UpdateCard(tmpCard.NewCard(cardsOnBoard[i]))
-				}
-			}
-		}
-	}
-}
-
-// if trello.Card != modules.Card => return true
-func CompareTwoCard(cardsBoard *trello.Card, cardsDB modules.Card) bool {
-	if cardsBoard.ID != cardsDB.ID {
-		return false
-	}
-	if cardsBoard.Due == nil && cardsDB.Due == nil {
-		return false
-	}
-	if cardsBoard.Due == nil && cardsDB.Due != nil {
-		return true
-	}
-	if cardsBoard.Due != nil && cardsDB.Due == nil {
-		return true
-	}
-	if cardsBoard.Due.String() == cardsDB.Due.String() {
-		return false
-	}
-	return true
 }
