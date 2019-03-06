@@ -1,27 +1,29 @@
 package trelloAPI
 
 import (
+	"fmt"
+
 	"github.com/adlio/trello"
 )
 
-func GetCardsIsOpenOnWeek(idBoard, nameList string) ([]*trello.Card, error) {
+func GetCardsIsOpenOnWeek(idBoard, nameList string) []*trello.Card {
 	cards, err := client.SearchCards("board:"+idBoard+" is:open sort:created created:week list:"+nameList, trello.Defaults())
 	if err != nil {
-		return nil, err
+		fmt.Println(err)
 	}
-	return cards, nil
+	return cards
 }
 
-func GetCardsOnBoard(idBoard string) ([]*trello.Card, error) {
+func GetCardsOnBoard(idBoard string) []*trello.Card {
 	board, err := client.GetBoard(idBoard, trello.Defaults())
 	if err != nil {
-		return nil, err
+		fmt.Println(err)
 	}
 
 	cards, err := board.GetCards(trello.Defaults())
 	if err != nil {
-		return nil, err
+		fmt.Println(err)
 	}
 
-	return cards, nil
+	return cards
 }
