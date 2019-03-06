@@ -11,6 +11,6 @@ func main() {
 	r := routers.Routers
 
 	routers.SetupRouters()
-	go routers.Routine()
+	//go routers.Routine()
 	r.Run(":3000")
 }

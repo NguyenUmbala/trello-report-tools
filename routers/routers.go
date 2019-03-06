@@ -18,5 +18,5 @@ func SetupRouters() {
 }
 
 func Routine() {
-	controllers.UpdateCards()
+	controllers.UpdateCardsInRealTime()
 }
