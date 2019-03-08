@@ -4,6 +4,7 @@ import "strconv"
 
 // Handle string
 // Get time in name of card
+// Example: "Demo(2)[3]" => get (2) and [3]
 
 func GetRealTimeOfDone(name string) int {
 	l := len(name)
