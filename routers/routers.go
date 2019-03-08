@@ -16,3 +16,7 @@ func SetupRouters() {
 	Routers.GET("/b/cards/review/:id_board", controllers.GetAllCardReview)
 	Routers.GET("/b/cards/changedue/:id_board", controllers.GetAllCardChangeDue)
 }
+
+func RoutineUpdate() {
+	controllers.UpdateBoardRealTime()
+}

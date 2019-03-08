@@ -1,7 +1,3 @@
-# Cách sử dụng API
-
-Mở terminal gõ: go run main.go
-
 # Các router:
 -- Review những thẻ được mở trong vòng 1 tuần:
     /b/cards/review/:id_board

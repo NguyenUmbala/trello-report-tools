@@ -1,6 +1,9 @@
-package utils
+package services
 
 import "strconv"
+
+// Handle string
+// Get time in name of card
 
 func GetRealTimeOfDone(name string) int {
 	l := len(name)

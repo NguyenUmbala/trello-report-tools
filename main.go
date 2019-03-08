@@ -1,7 +1,6 @@
 package main
 
 import (
-	"TrelloReportTools/handles"
 	"TrelloReportTools/routers"
 	"sync"
 
@@ -15,7 +14,8 @@ func main() {
 
 	var wg sync.WaitGroup
 	wg.Add(1)
-	go handles.UpdateCardsInRealTime()
+
+	go routers.RoutineUpdate()
 	r.Run(":3000")
 	wg.Wait()
 }
