@@ -8,7 +8,7 @@ import (
 	"github.com/adlio/trello"
 )
 
-type Service struct{}
+type ServiceGet struct{}
 
 var db store.Database
 var dbTrello store.TrelloDatabase
@@ -18,9 +18,8 @@ func init() {
 	dbTrello = *dbTrello.Start()
 }
 
-func (s Service) GetCardsIsOpenOnWeek(idboard, is, sort, created, list string) []*trello.Card {
+func (*ServiceGet) GetCardsIsOpenOnWeek(idboard, is, sort, created, list string) []*trello.Card {
 	var query = "board:" + idboard + " is:" + is + " sort:" + sort + " created:" + created + " list:" + list
-
 	cards, err := dbTrello.SelectManyTrello(query)
 	if err != nil {
 		return nil
@@ -29,7 +28,7 @@ func (s Service) GetCardsIsOpenOnWeek(idboard, is, sort, created, list string) [
 	return cards
 }
 
-func (s Service) GetCardsChangedDueByTime(dayNumber int) []models.Card {
+func (*ServiceGet) GetCardsChangedDueByTime(dayNumber int) []models.Card {
 	cards, _ := db.SelectAll()
 	dayBefore := time.Now().AddDate(0, 0, -dayNumber)
 
@@ -41,4 +40,33 @@ func (s Service) GetCardsChangedDueByTime(dayNumber int) []models.Card {
 	}
 
 	return cardsChangedDueDate
+}
+
+func (*ServiceGet) GetCardsOnBoard(idBoard string) []*trello.Card {
+	query := "board:" + idBoard
+	cards, err := dbTrello.SelectManyTrello(query)
+	if err != nil {
+		return nil
+	}
+
+	return cards
+}
+
+func (*ServiceGet) GetCardsChangedDueDateOnBoard(idBoard string) (cards []*trello.Card) {
+	cardsOnBoard, _ := dbTrello.SelectManyTrello("board:" + idBoard)
+	cardsOnDB, _ := db.SelectAll()
+
+	// Compare due date of two cards
+	for _, cardBoard := range cardsOnBoard {
+		for _, cardDB := range cardsOnDB {
+			if cardBoard.ID == cardDB.ID {
+				if UtilTime.CompareTime(cardBoard.Due, cardDB.Due) == false {
+					cards = append(cards, cardBoard)
+				}
+				break
+			}
+		}
+	}
+
+	return
 }
