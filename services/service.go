@@ -1,45 +1,44 @@
 package services
 
-import "strconv"
+import (
+	"TrelloReportTools/models"
+	"TrelloReportTools/store"
+	"time"
 
-// Handle string
-// Get time in name of card
-// Example: "Demo(2)[3]" => get (2) and [3]
+	"github.com/adlio/trello"
+)
 
-func GetRealTimeOfDone(name string) int {
-	l := len(name)
-	time := ""
-	for i := l - 1; i > 0; i-- {
-		if string(name[i]) == "]" {
-			i--
-			for ; string(name[i]) != "["; i-- {
-				time = string(name[i]) + string(time)
-			}
-			break
-		}
-		if i == 0 {
-			time = "0"
-		}
-	}
-	ret, _ := strconv.Atoi(time)
-	return ret
+type Service struct{}
+
+var db store.Database
+var dbTrello store.TrelloDatabase
+
+func init() {
+	db = db.Start()
+	dbTrello = dbTrello.Start()
 }
 
-func GetTimeGuessForDone(name string) int {
-	l := len(name)
-	time := ""
-	for i := l - 1; i > 0; i-- {
-		if string(name[i]) == ")" {
-			i--
-			for ; string(name[i]) != "("; i-- {
-				time = string(name[i]) + string(time)
-			}
-			break
-		}
-		if i == 0 {
-			time = "0"
+func (s Service) GetCardsIsOpenOnWeek(idboard, is, sort, created, list string) []*trello.Card {
+	var query = "board:" + idboard + " is:" + is + " sort:" + sort + " created:" + created + " list:" + list
+
+	cards, err := dbTrello.SelectManyTrello(query)
+	if err != nil {
+		return nil
+	}
+
+	return cards
+}
+
+func (s Service) GetCardsChangedDueByTime(dayNumber int) []models.Card {
+	cards, _ := db.SelectAll()
+	dayBefore := time.Now().AddDate(0, 0, -dayNumber)
+
+	var cardsChangedDueDate []models.Card
+	for _, v := range cards {
+		if dayBefore.Before(*v.DateLastChangeDue) {
+			cardsChangedDueDate = append(cardsChangedDueDate, v)
 		}
 	}
-	ret, _ := strconv.Atoi(time)
-	return ret
+
+	return cardsChangedDueDate
 }

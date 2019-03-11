@@ -12,11 +12,14 @@ func init() {
 	Routers = gin.Default()
 }
 
+var Card controllers.Card
+var UpdateCard controllers.UpdateCard
+
 func SetupRouters() {
-	Routers.GET("/b/cards/review/:id_board", controllers.GetAllCardReview)
-	Routers.GET("/b/cards/changedue/:id_board", controllers.GetAllCardChangeDue)
+	Routers.GET("/b/cards/review", Card.GetAllCardReview)
+	Routers.GET("/b/cards/changedue", Card.GetAllCardChangeDue)
 }
 
 func RoutineUpdate() {
-	controllers.UpdateBoardRealTime()
+	UpdateCard.UpdateCardRealTime()
 }
