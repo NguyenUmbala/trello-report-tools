@@ -14,8 +14,8 @@ var db store.Database
 var dbTrello store.TrelloDatabase
 
 func init() {
-	db = db.Start()
-	dbTrello = dbTrello.Start()
+	db = *db.Start()
+	dbTrello = *dbTrello.Start()
 }
 
 func (s Service) GetCardsIsOpenOnWeek(idboard, is, sort, created, list string) []*trello.Card {

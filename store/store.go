@@ -11,7 +11,7 @@ type Database struct {
 	repo *gorm.DB
 }
 
-func (db Database) Start() Database {
+func (db *Database) Start() *Database {
 	db.repo, _ = gorm.Open("sqlite3", "card.db")
 	db.repo.AutoMigrate(&models.Card{})
 	return db

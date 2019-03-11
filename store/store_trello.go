@@ -10,7 +10,7 @@ type TrelloDatabase struct {
 	client *trello.Client
 }
 
-func (trelloDB TrelloDatabase) Start() TrelloDatabase {
+func (trelloDB *TrelloDatabase) Start() *TrelloDatabase {
 	conf := config.Setup()
 	trelloDB.client = trello.NewClient(conf.KeyApp, conf.Token)
 

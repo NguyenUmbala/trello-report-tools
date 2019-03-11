@@ -4,7 +4,7 @@ import "strconv"
 
 type UtilString struct{}
 
-func (u UtilString) GetRealTimeOfDone(name string) int {
+func (*UtilString) GetRealTimeOfDone(name string) int {
 	l := len(name)
 	time := ""
 	for i := l - 1; i > 0; i-- {
@@ -23,7 +23,7 @@ func (u UtilString) GetRealTimeOfDone(name string) int {
 	return ret
 }
 
-func (u UtilString) GetTimeGuessForDone(name string) int {
+func (*UtilString) GetTimeGuessForDone(name string) int {
 	l := len(name)
 	time := ""
 	for i := l - 1; i > 0; i-- {

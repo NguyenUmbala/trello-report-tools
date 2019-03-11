@@ -10,7 +10,7 @@ type ServiceUpdate struct{}
 var UtilString utils.UtilString
 var UtilTime utils.UtilTime
 
-func (s ServiceUpdate) UpdateCards(idBoard string) {
+func (*ServiceUpdate) UpdateCards(idBoard string) {
 	cardsOnBoard, _ := dbTrello.SelectManyTrello("board:" + idBoard)
 	cardsOnDB, _ := db.SelectAll()
 	var timeGuess, timeReal int
@@ -36,7 +36,7 @@ func (s ServiceUpdate) UpdateCards(idBoard string) {
 	}
 }
 
-func (s ServiceUpdate) SaveAllCards(idboard string) {
+func (*ServiceUpdate) SaveAllCards(idboard string) {
 	cardsOnBoard, _ := dbTrello.SelectManyTrello("board:" + idboard)
 
 	for _, v := range cardsOnBoard {
