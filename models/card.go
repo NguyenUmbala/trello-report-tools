@@ -16,7 +16,9 @@ type Card struct {
 	DateLastChangeDue *time.Time `json:"dateLastActivity"`
 }
 
-func NewCard(card *trello.Card, timeguess, timereal int) Card {
+type DBCard struct{}
+
+func (*DBCard) NewCard(card *trello.Card, timeguess, timereal int) Card {
 	return Card{
 		ID:                card.ID,
 		Name:              card.Name,
@@ -26,4 +28,14 @@ func NewCard(card *trello.Card, timeguess, timereal int) Card {
 		Due:               card.Due,
 		DateLastChangeDue: card.DateLastActivity,
 	}
+}
+
+func (*DBCard) InsertOrUpdate(card Card) (err error) {
+	db.Save(&card)
+	return nil
+}
+
+func (*DBCard) SelectAll() (cards []Card, err error) {
+	err = db.Find(&cards).Error
+	return
 }

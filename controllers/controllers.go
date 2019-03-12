@@ -7,36 +7,32 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type GetCard struct{}
+type Card struct{}
 
 var conf = config.Setup()
-var ServiceGet services.ServiceGet
-var ServiceUpdate services.ServiceUpdate
+var ServiceCard services.Card
 
 func init() {
-	cardsOnBoard := ServiceGet.GetCardsOnBoard(conf.IDBoard)
-	for _, value := range cardsOnBoard {
-		ServiceUpdate.UpdateCard(value)
-	}
+	cardsOnTrelloDB := ServiceCard.GetCardsOnBoard(conf.IDBoard)
+	cardsOnDB := ServiceCard.ConvertCardsTrelloDBToDB(cardsOnTrelloDB)
+	ServiceCard.SaveCards(cardsOnDB)
 }
 
-func (*GetCard) GetAllCardReview(c *gin.Context) {
+// Review all card is open and created on week
+func (*Card) GetAllCardReview(c *gin.Context) {
 	idBoard := conf.IDBoard
 
-	cardsOnListReviewMe := ServiceGet.GetCardsIsOpenOnWeek(idBoard, "open", "created", "week", "review-me")
-	cardsOnListDone := ServiceGet.GetCardsIsOpenOnWeek(idBoard, "open", "created", "week", "Done")
-
 	c.JSON(200, gin.H{
-		"List card on review-me": cardsOnListReviewMe,
-		"List card on Done":      cardsOnListDone,
+		"List card on review-me": ServiceCard.GetCardsIsOpenOnWeek(idBoard, "review-me"),
+		"List card on Done":      ServiceCard.GetCardsIsOpenOnWeek(idBoard, "Done"),
 	})
 }
 
-func (*GetCard) GetAllCardChangeDue(c *gin.Context) {
+// Review all card changed due date by last day
+func (*Card) GetAllCardChangeDue(c *gin.Context) {
 	dayNumber := 1 // Day number before check day
-	cardsChangedDueDate := ServiceGet.GetCardsChangedDueByTime(dayNumber)
 
 	c.JSON(200, gin.H{
-		"Cards changed due date": cardsChangedDueDate,
+		"Cards changed due date": ServiceCard.GetCardsChangedDueByTime(dayNumber),
 	})
 }

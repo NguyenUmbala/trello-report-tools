@@ -17,4 +17,4 @@ RUN go get github.com/jinzhu/gorm/dialects/sqlite
 EXPOSE 3000
 
 #RUN go build -o main .
-CMD ["trello-report-tools"]
+CMD ["trelloreport"]
