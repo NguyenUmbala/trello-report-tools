@@ -15,7 +15,7 @@ func init() {
 	client = trello.NewClient(conf.KeyApp, conf.Token)
 }
 
-func (*DBTrelloCard) SelectMany(query string) (cards []*trello.Card, err error) {
+func (*DBTrelloCard) GetMany(query string) (cards []*trello.Card, err error) {
 	cards, err = client.SearchCards(query, trello.Defaults())
 	if err != nil {
 		return nil, err

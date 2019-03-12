@@ -1,10 +1,23 @@
 package utils
 
-import "strconv"
+import (
+	"strconv"
+	"time"
+)
 
-type UtilString struct{}
+type Utils struct{}
 
-func (*UtilString) GetRealTimeOfDone(name string) int {
+func (*Utils) CompareTime(a *time.Time, b *time.Time) bool {
+	if a == nil && b == nil {
+		return true
+	}
+	if a != nil && b != nil && a.String() == b.String() {
+		return true
+	}
+	return false
+}
+
+func (*Utils) GetTimeRealForDone(name string) int {
 	l := len(name)
 	time := ""
 	for i := l - 1; i > 0; i-- {
@@ -23,7 +36,7 @@ func (*UtilString) GetRealTimeOfDone(name string) int {
 	return ret
 }
 
-func (*UtilString) GetTimeGuessForDone(name string) int {
+func (*Utils) GetTimeGuessForDone(name string) int {
 	l := len(name)
 	time := ""
 	for i := l - 1; i > 0; i-- {

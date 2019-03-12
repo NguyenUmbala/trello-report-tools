@@ -11,7 +11,3 @@ func init() {
 	db, _ = gorm.Open("sqlite3", "card.db")
 	db.AutoMigrate(&Card{})
 }
-
-func getDB() *gorm.DB {
-	return db
-}
