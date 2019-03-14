@@ -1,21 +1,24 @@
 package controllers
 
-import "fmt"
-
-func UpdateCardRealTime() {
+func UpdateCardRealTime() (err error) {
 	idBoard := conf.IDBoard
 
 	for {
 		cardsOnTrelloDB, err := DBTrelloCard.GetMany("board:" + idBoard)
 		if err != nil {
-			fmt.Println(err)
+			return err
 		}
 
 		cardsOnDB, err := DBCard.GetAll()
 		if err != nil {
-			fmt.Println(err)
+			return err
 		}
 
-		DBCard.UpdateCardsChangedDueDate(cardsOnTrelloDB, cardsOnDB)
+		err = DBCard.UpdateCardsChangedDueDate(cardsOnTrelloDB, cardsOnDB)
+		if err != nil {
+			return err
+		}
+
 	}
+	return nil
 }

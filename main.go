@@ -9,8 +9,7 @@ import (
 
 func main() {
 	gin.SetMode(gin.DebugMode)
-	r := routers.Routers
-	routers.SetupRouters()
+	r := routers.SetupRouters()
 
 	var wg sync.WaitGroup
 	wg.Add(1)

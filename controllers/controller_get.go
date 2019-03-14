@@ -11,13 +11,6 @@ var conf = config.Setup()
 var DBCard models.DBCard
 var DBTrelloCard models.DBTrelloCard
 
-func init() {
-	idBoard := conf.IDBoard
-	cardsOnBoard, _ := DBTrelloCard.GetMany("board:" + idBoard)
-
-	DBCard.SaveTrelloCards(cardsOnBoard)
-}
-
 // Review all card is open and created on week
 func GetAllCardReview(c *gin.Context) {
 	idBoard := conf.IDBoard

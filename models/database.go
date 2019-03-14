@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
@@ -8,6 +10,11 @@ import (
 var db *gorm.DB
 
 func init() {
-	db, _ = gorm.Open("sqlite3", "card.db")
+	var err error
+	db, err = gorm.Open("sqlite3", "card.db")
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	db.AutoMigrate(&Card{})
 }

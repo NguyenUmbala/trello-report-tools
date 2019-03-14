@@ -67,18 +67,33 @@ func (dbCard *DBCard) GetCardsChangedDueByTime(dayNumber int) []Card {
 	return cardsChangedDueDate
 }
 
-func (dbCard *DBCard) UpdateCardsChangedDueDate(cardsOnBoard []*trello.Card, cardsOnDB []Card) {
+func (dbCard *DBCard) UpdateCardsChangedDueDate(cardsOnBoard []*trello.Card, cardsOnDB []Card) error {
 	for _, cardBoard := range cardsOnBoard {
-		for _, cardDB := range cardsOnDB {
-
-			if cardBoard.ID == cardDB.ID {
-				if Utils.CompareTime(cardBoard.Due, cardDB.Due) == false {
-					cardDB.Due = cardBoard.Due
-					cardDB.DateLastChangeDue = cardBoard.DateLastActivity
-					dbCard.InsertOrUpdate(cardDB)
+		for j := 0; ; j++ {
+			if j == len(cardsOnDB) {
+				err := dbCard.InsertOrUpdate(dbCard.NewCard(cardBoard))
+				if err != nil {
+					return err
 				}
+
+				break
+			}
+
+			if cardBoard.ID == cardsOnDB[j].ID {
+				if Utils.CompareTime(cardBoard.Due, cardsOnDB[j].Due) == false {
+					cardsOnDB[j].Due = cardBoard.Due
+					cardsOnDB[j].DateLastChangeDue = cardBoard.DateLastActivity
+
+					err := dbCard.InsertOrUpdate(cardsOnDB[j])
+					if err != nil {
+						return err
+					}
+				}
+
 				break
 			}
 		}
 	}
+
+	return nil
 }

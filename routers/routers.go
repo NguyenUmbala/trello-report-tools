@@ -6,15 +6,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var Routers *gin.Engine
-
 func init() {
-	Routers = gin.Default()
 }
 
-func SetupRouters() {
+func SetupRouters() *gin.Engine {
+	var Routers *gin.Engine
+	Routers = gin.Default()
+
 	Routers.GET("/b/cards/review", controllers.GetAllCardReview)
 	Routers.GET("/b/cards/changedue", controllers.GetAllCardChangeDue)
+
+	return Routers
 }
 
 func RoutineUpdate() {
