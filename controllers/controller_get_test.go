@@ -7,71 +7,76 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/adlio/trello"
+
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
+var router = routers.SetupRouters()
+
+// Count number of cards on response
 func Test_GetAllCardReview(t *testing.T) {
-	// var tests = []struct {
-	// 	input    *gin.Context
-	// 	expected error
-	// }{
-	// 	{
-	// 		input:    &c,
-	// 		expected: nil,
-	// 	},
-	// }
-
-	// for _, test := range tests {
-	// 	output := GetAllCardReview(test.input)
-	// 	if output != test.expected {
-	// 		t.Error("Test failed:\n Input:", test.input, "\n Output:", output, "\n Expected:", test.expected)
-	// 	}
-	// }
-
-	body := gin.H{
-		"List card on review-me": "world",
-		"List card on Done":      "as",
+	tests := []struct {
+		input    string
+		expected gin.H
+	}{
+		{
+			input: "/b/cards/review",
+			expected: gin.H{
+				"Number of cards on review-me": 1,
+				"Number of cards on Done":      1,
+			},
+		},
 	}
 
-	router := routers.SetupRouters()
+	for _, test := range tests {
 
-	w := performRequest(router, "GET", "/b/cards/review")
-	assert.Equal(t, http.StatusOK, w.Code)
+		w := performRequest(router, "GET", test.input)
+		assert.Equal(t, http.StatusOK, w.Code)
 
-	var response map[string]string
-	err := json.Unmarshal([]byte(w.Body.String()), &response)
+		var response map[string][]*trello.Card
+		err := json.Unmarshal([]byte(w.Body.String()), &response)
+		assert.Nil(t, err)
 
-	listCardsOnReviewme, exists := response["List card on review-me"]
-	assert.Nil(t, err)
-	assert.True(t, exists)
-	assert.Equal(t, body["List card on review-me"], listCardsOnReviewme)
+		listCardsOnReviewme, exists := response["List card on review-me"]
+		assert.True(t, exists)
+		assert.Equal(t, test.expected["Number of cards on review-me"], len(listCardsOnReviewme))
 
-	listCardsOnDone, exists := response["List card on Done"]
-	assert.Nil(t, err)
-	assert.True(t, exists)
-	assert.Equal(t, body["List card on Done"], listCardsOnDone)
+		listCardsOnDone, exists := response["List card on Done"]
+		assert.True(t, exists)
+		assert.Equal(t, test.expected["Number of cards on Done"], len(listCardsOnDone))
+	}
 }
 
-// func Test_GetAllCardChangeDue(t *testing.T) {
-// 	var c gin.Context
-// 	var tests = []struct {
-// 		input    *gin.Context
-// 		expected error
-// 	}{
-// 		{
-// 			input:    &c,
-// 			expected: nil,
-// 		},
-// 	}
+func Test_GetAllCardChangeDue(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected gin.H
+	}{
+		{
+			input: "/b/cards/changedue",
+			expected: gin.H{
+				"Number of cards changed due date": 5,
+			},
+		},
+	}
 
-// 	for _, test := range tests {
-// 		output := GetAllCardChangeDue(test.input)
-// 		if output != test.expected {
-// 			t.Error("Test failed:\n Input:", test.input, "\n Output:", output, "\n Expected:", test.expected)
-// 		}
-// 	}
-// }
+	for _, test := range tests {
+
+		w := performRequest(router, "GET", test.input)
+		assert.Equal(t, http.StatusOK, w.Code)
+
+		var response map[string][]*trello.Card
+		err := json.Unmarshal([]byte(w.Body.String()), &response)
+		assert.Nil(t, err)
+
+		listCardsChangedDueDate, exists := response["Cards changed due date"]
+		assert.True(t, exists)
+		assert.Equal(t, test.expected["Number of cards changed due date"], len(listCardsChangedDueDate))
+	}
+}
+
 func performRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(method, path, nil)
 	w := httptest.NewRecorder()
