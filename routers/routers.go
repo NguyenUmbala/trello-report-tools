@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"TrelloReportTools/controllers"
+	"trello-report-tools/controllers"
 
 	"github.com/gin-gonic/gin"
 )

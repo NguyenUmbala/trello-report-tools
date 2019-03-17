@@ -1,8 +1,8 @@
 package models
 
 import (
-	"TrelloReportTools/utils"
 	"time"
+	"trello-report-tools/utils"
 
 	"github.com/adlio/trello"
 )

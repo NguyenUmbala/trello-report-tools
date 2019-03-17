@@ -1,12 +1,12 @@
 package controllers_test
 
 import (
-	"TrelloReportTools/models"
-	"TrelloReportTools/routers"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"trello-report-tools/models"
+	"trello-report-tools/routers"
 
 	"github.com/adlio/trello"
 

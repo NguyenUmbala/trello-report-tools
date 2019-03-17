@@ -1,8 +1,9 @@
 package main
 
 import (
-	"TrelloReportTools/routers"
 	"sync"
+
+	"./routers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,6 +16,6 @@ func main() {
 	wg.Add(1)
 
 	go routers.RoutineUpdate()
-	r.Run(":3000")
+	r.Run(":8080")
 	wg.Wait()
 }

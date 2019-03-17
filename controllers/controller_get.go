@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"TrelloReportTools/config"
-	"TrelloReportTools/models"
+	"trello-report-tools/config"
+	"trello-report-tools/models"
 
 	"github.com/gin-gonic/gin"
 )

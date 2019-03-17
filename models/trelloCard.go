@@ -1,7 +1,7 @@
 package models
 
 import (
-	"TrelloReportTools/config"
+	"trello-report-tools/config"
 
 	"github.com/adlio/trello"
 )
