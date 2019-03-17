@@ -3,7 +3,7 @@ package main
 import (
 	"sync"
 
-	"./routers"
+	"trello-report-tools/routers"
 
 	"github.com/gin-gonic/gin"
 )
