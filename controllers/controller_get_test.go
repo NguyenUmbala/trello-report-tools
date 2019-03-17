@@ -1,6 +1,7 @@
 package controllers_test
 
 import (
+	"TrelloReportTools/models"
 	"TrelloReportTools/routers"
 	"encoding/json"
 	"net/http"
@@ -67,7 +68,7 @@ func Test_GetAllCardChangeDue(t *testing.T) {
 		w := performRequest(router, "GET", test.input)
 		assert.Equal(t, http.StatusOK, w.Code)
 
-		var response map[string][]*trello.Card
+		var response map[string][]models.Card
 		err := json.Unmarshal([]byte(w.Body.String()), &response)
 		assert.Nil(t, err)
 

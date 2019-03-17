@@ -5,16 +5,18 @@ FROM golang:1.12
 WORKDIR $GOPATH/src/TrelloReportTools
 
 # Copy everything in current working directory
-COPY . .
+ADD . .
 
 # Download all dependencies
 RUN go get github.com/gin-gonic/gin
 RUN go get github.com/adlio/trello
 RUN go get github.com/jinzhu/gorm
-RUN go get github.com/jinzhu/gorm/dialects/sqlite
+RUN go get github.com/mattn/go-sqlite3
+RUN go get github.com/stretchr/testify/assert
 
-# Set port
+RUN go build -o trelloreporttools
+
 EXPOSE 3000
 
 #RUN go build -o main .
-CMD ["trelloreport"]
+CMD [ "./trelloreporttools" ]
