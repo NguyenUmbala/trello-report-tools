@@ -13,8 +13,8 @@ func SetupRouters() *gin.Engine {
 	var Routers *gin.Engine
 	Routers = gin.Default()
 
-	Routers.GET("/b/cards/review", controllers.GetAllCardReview)
-	Routers.GET("/b/cards/changedue", controllers.GetAllCardChangeDue)
+	Routers.GET("/api/review", controllers.GetAllCardReview)
+	Routers.GET("/api/changedue", controllers.GetAllCardChangeDue)
 
 	return Routers
 }
