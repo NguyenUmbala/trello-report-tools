@@ -16,6 +16,6 @@ func main() {
 	wg.Add(1)
 
 	go routers.RoutineUpdate()
-	r.Run(":8011")
+	r.Run(":8080")
 	wg.Wait()
 }
