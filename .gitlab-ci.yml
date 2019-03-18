@@ -6,10 +6,8 @@ deploy-test:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - whoami
-    - cd /var/www/html/project_folder
+    - cd go/src/trello-report-tools
   script:
     - git pull
-    - cp app/install/.server_test_db.php app/config/database.php 
-    - php index.php migrate
   only:
     - test-server
