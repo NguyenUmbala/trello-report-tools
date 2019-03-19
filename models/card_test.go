@@ -40,7 +40,7 @@ func Test_DBCard_GetAll(t *testing.T) {
 	}{
 		{
 			input:              nil,
-			expectedCardNumber: 13,
+			expectedCardNumber: 14,
 			expectedErr:        nil,
 		},
 	}
@@ -64,7 +64,7 @@ func Test_DBCard_SaveTrelloCards(t *testing.T) {
 	}{
 		{
 			input:              nil,
-			expectedCardNumber: 13,
+			expectedCardNumber: 14,
 		},
 	}
 
@@ -89,7 +89,7 @@ func Test_DBCard_GetCardsChangedDueByTime(t *testing.T) {
 	}{
 		{
 			input:              1,
-			expectedCardNumber: 6,
+			expectedCardNumber: 2,
 			expectedErr:        nil,
 		},
 	}

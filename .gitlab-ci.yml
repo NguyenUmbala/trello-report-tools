@@ -1,13 +1,22 @@
-deploy-test:
+image: golang
+
+Test:
+  stage: test
+
   before_script:
-    - 'which ssh-agent || ( yum update -y && yum install openssh-client -y )'
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - whoami
-    - cd go/src/trello-report-tools
+    - cd $GOPATH/src
+    - mkdir -p gitlab.com/$CI_PROJECT_NAMESPACE
+    - cd gitlab.com/$CI_PROJECT_NAMESPACE
+    - ln -s $CI_PROJECT_DIR
+    - cd $CI_PROJECT_NAME
+    - go get github.com/gin-gonic/gin
+    - go get github.com/adlio/trello
+    - go get github.com/stretchr/testify/assert
+    - go get github.com/jinzhu/gorm
+    - go get github.com/mattn/go-sqlite3
+    - git clone https://github.com/NguyenUmbala/trello-report-tools/
+
   script:
-    - git pull
-  only:
-    - test-server
+    - cd $GOPATH/src/gitlab.com/$CI_PROJECT_NAMESPACE
+    - cd $CI_PROJECT_NAME
+    - go test ./...

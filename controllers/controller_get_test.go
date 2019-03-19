@@ -23,9 +23,9 @@ func Test_GetAllCardReview(t *testing.T) {
 		expected gin.H
 	}{
 		{
-			input: "/b/cards/review",
+			input: "/api/review",
 			expected: gin.H{
-				"Number of cards on review-me": 1,
+				"Number of cards on review-me": 0,
 				"Number of cards on Done":      1,
 			},
 		},
@@ -56,9 +56,9 @@ func Test_GetAllCardChangeDue(t *testing.T) {
 		expected gin.H
 	}{
 		{
-			input: "/b/cards/changedue",
+			input: "/api/changedue",
 			expected: gin.H{
-				"Number of cards changed due date": 5,
+				"Number of cards changed due date": 1,
 			},
 		},
 	}
